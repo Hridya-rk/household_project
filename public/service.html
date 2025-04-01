@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HOUSIE - Service Providers</title>
+    
+    <link rel="stylesheet" href="css/service.css">
+</head>
+<body>
+    <header>
+        <div class="dropdown">
+            <button class="dropdown-btn">
+                Services 
+                <span class="dropdown-icon">▼</span>
+            </button>
+            <div class="dropdown-content">
+                <a href="service.html?type=electricians">ELECTRICIANS</a>
+                <a href="service.html?type=plumbers">PLUMBERS</a>
+                <a href="service.html?type=carpenters">CARPENTERS</a>
+                <a href="service.html?type=cleaners">CLEANERS</a>
+                <a href="service.html?type=babysitters">BABYSITTERS</a>
+                <a href="service.html?type=mechanics">MECHANICS</a>
+                <a href="service.html?type=security">HOME SECURITY APPLIANCE</a>
+            </div>
+        </div>
+        
+        <div class="logo">
+            <h1>HOUSIE</h1>
+        </div>
+        
+        <div class="user-profile">
+            <div class="user-avatar" id="user-avatar">
+                JS
+            </div>
+            <div class="user-info">
+                <span class="user-name" id="user-name">John Smith</span>
+                <span class="user-contact" id="user-email">john.smith@email.com</span>
+            </div>
+            <button id="logout-btn" class="logout-btn">Logout</button>
+        </div>
+    </header>
+    
+    <main>
+        <h1 class="page-title" id="service-title">Electricians</h1>
+        <p class="service-description" id="service-description">Our professional electricians can handle a wide range of electrical services including installations, repairs, wiring, and maintenance. All our electricians are licensed, insured, and have undergone thorough background checks.</p>
+        
+        <div class="filters">
+            <div class="filter-group">
+                <label class="filter-label">Sort By</label>
+                <select class="filter-select" id="sort-filter">
+                    <option value="rating">Highest Rated</option>
+                    <option value="price-low">Price: Low to High</option>
+                    <option value="price-high">Price: High to Low</option>
+                    <option value="experience">Most Experienced</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label class="filter-label">Availability</label>
+                <select class="filter-select" id="availability-filter">
+                    <option value="any">Any Time</option>
+                    <option value="today">Today</option>
+                    <option value="tomorrow">Tomorrow</option>
+                    <option value="weekend">This Weekend</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label class="filter-label">Rating</label>
+                <select class="filter-select" id="rating-filter">
+                    <option value="any">Any Rating</option>
+                    <option value="4">4+ Stars</option>
+                    <option value="4.5">4.5+ Stars</option>
+                    <option value="5">5 Stars</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="providers-list" id="providers-list">
+            <!-- Provider cards will be populated here dynamically -->
+        </div>
+    </main>
+    
+    <!-- Booking Modal -->
+    <div class="modal" id="booking-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Book Appointment</h3>
+                <button class="close-button" id="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form class="booking-form" id="booking-form">
+                    <div class="form-group">
+                        <label for="service-provider">Service Provider</label>
+                        <input type="text" id="service-provider" class="form-control" disabled>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="service-type">Service Type</label>
+                        <select id="service-type" class="form-control">
+                            <option value="">Select Service Type</option>
+                            <!-- Service options will be populated dynamically -->
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="booking-date">Preferred Date</label>
+                        <input type="date" id="booking-date" class="form-control" min="" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="booking-time">Preferred Time</label>
+                        <select id="booking-time" class="form-control" required>
+                            <option value="">Select Time</option>
+                            <option value="09:00">09:00 AM</option>
+                            <option value="10:00">10:00 AM</option>
+                            <option value="11:00">11:00 AM</option>
+                            <option value="12:00">12:00 PM</option>
+                            <option value="13:00">01:00 PM</option>
+                            <option value="14:00">02:00 PM</option>
+                            <option value="15:00">03:00 PM</option>
+                            <option value="16:00">04:00 PM</option>
+                            <option value="17:00">05:00 PM</option>
+                            <option value="18:00">06:00 PM</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="booking-notes">Notes (Optional)</label>
+                        <textarea id="booking-notes" class="form-control" rows="3" placeholder="Describe your requirements or any specific instructions"></textarea>
+                    </div>
+                    
+                    <button type="submit" class="confirm-booking">Confirm Booking</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Sample data for different service providers (in a real application, this would come from a server)
+        const serviceData = {
+            electricians: {
+                title: "Electricians",
+                description: "Our professional electricians can handle a wide range of electrical services including installations, repairs, wiring, and maintenance. All our electricians are licensed, insured, and have undergone thorough background checks.",
+                providers: [
+                    {
+                        id: "e1",
+                        name: "Robert Johnson",
+                        initials: "RJ",
+                        rating: 4.9,
+                        experience: 15,
+                        specialties: ["Wiring", "Installations", "Repairs", "Safety Inspections"],
+                        pricing: "Starting at $60/hr",
+                        services: ["Electrical Panel Upgrade", "Wiring Installation", "Light Fixture Installation", "Outlet Repair"]
+                    },
+                    {
+                        id: "e2",
+                        name: "Anna Martinez",
+                        initials: "AM",
+                        rating: 4.8,
+                        experience: 12,
+                        specialties: ["Troubleshooting", "Ceiling Fans", "Smart Devices"],
+                        pricing: "Starting at $55/hr",
+                        services: ["Smart Home Installation", "Circuit Repair", "Outlet Installation", "Emergency Repairs"]
+                    },
+                    {
+                        id: "e3",
+                        name: "David Wilson",
+                        initials: "DW",
+                        rating: 4.7,
+                        experience: 8,
+                        specialties: ["Residential", "Commercial", "Lighting"],
+                        pricing: "Starting at $50/hr",
+                        services: ["Lighting Installation", "Electrical Troubleshooting", "Home Inspection", "Electrical Maintenance"]
+                    },
+                    {
+                        id: "e4",
+                        name: "Sarah Thompson",
+                        initials: "ST",
+                        rating: 5.0,
+                        experience: 20,
+                        specialties: ["Industrial", "High-voltage", "Emergency Services"],
+                        pricing: "Starting at $70/hr",
+                        services: ["Emergency Electrical Service", "Industrial Wiring", "Electrical Design", "Power Distribution"]
+                    },
+                    {
+                        id: "e5",
+                        name: "Michael Brown",
+                        initials: "MB",
+                        rating: 4.6,
+                        experience: 5,
+                        specialties: ["Residential", "Appliance Installation"],
+                        pricing: "Starting at $45/hr",
+                        services: ["Appliance Installation", "Outlet Installation", "Fan Installation", "Lighting Repair"]
+                    }
+                ]
+            },
+            plumbers: {
+                title: "Plumbers",
+                description: "Our skilled plumbers are available for all your plumbing needs, from fixing leaks and unclogging drains to installing new fixtures and pipes. We offer 24/7 emergency services for urgent issues.",
+                providers: [
+                    {
+                        id: "p1",
+                        name: "James Williams",
+                        initials: "JW",
+                        rating: 4.8,
+                        experience: 18,
+                        specialties: ["Leak Repairs", "Pipe Installation", "Water Heaters"],
+                        pricing: "Starting at $65/hr",
+                        services: ["Leak Repair", "Pipe Installation", "Water Heater Repair", "Drain Cleaning"]
+                    },
+                    {
+                        id: "p2",
+                        name: "Emily Davis",
+                        initials: "ED",
+                        rating: 4.9,
+                        experience: 10,
+                        specialties: ["Bathroom Fixtures", "Kitchen Plumbing", "Sump Pumps"],
+                        pricing: "Starting at $60/hr",
+                        services: ["Bathroom Remodel", "Kitchen Plumbing", "Fixture Installation", "Sump Pump Installation"]
+                    },
+                    {
+                        id: "p3",
+                        name: "Thomas Garcia",
+                        initials: "TG",
+                        rating: 4.7,
+                        experience: 7,
+                        specialties: ["Drain Cleaning", "Sewer Lines", "Emergency Services"],
+                        pricing: "Starting at $55/hr",
+                        services: ["Drain Cleaning", "Sewer Line Repair", "Emergency Plumbing", "Toilet Repair"]
+                    }
+                ]
+            },
+            carpenters: {
+                title: "Carpenters",
+                description: "Our expert carpenters specialize in custom woodworking, furniture repair, home renovations, and general carpentry services. From built-in shelves to deck construction, we deliver quality craftsmanship.",
+                providers: [
+                    {
+                        id: "c1",
+                        name: "Daniel Miller",
+                        initials: "DM",
+                        rating: 4.9,
+                        experience: 22,
+                        specialties: ["Custom Furniture", "Cabinetry", "Finish Carpentry"],
+                        pricing: "Starting at $70/hr",
+                        services: ["Custom Furniture", "Cabinet Installation", "Wood Repair", "Custom Shelving"]
+                    },
+                    {
+                        id: "c2",
+                        name: "Rebecca Taylor",
+                        initials: "RT",
+                        rating: 4.8,
+                        experience: 15,
+                        specialties: ["Home Renovations", "Deck Building", "Crown Molding"],
+                        pricing: "Starting at $65/hr",
+                        services: ["Deck Construction", "Home Renovation", "Crown Molding", "Door Installation"]
+                    }
+                ]
+            },
+            cleaners: {
+                title: "Cleaners",
+                description: "Our cleaning professionals provide thorough and eco-friendly cleaning services for homes and offices. Whether you need regular maintenance or a deep clean, our trusted cleaners have you covered.",
+                providers: [
+                    {
+                        id: "cl1",
+                        name: "Sophia Rodriguez",
+                        initials: "SR",
+                        rating: 4.9,
+                        experience: 12,
+                        specialties: ["Deep Cleaning", "Move-in/out", "Eco-friendly Products"],
+                        pricing: "Starting at $40/hr",
+                        services: ["Deep Cleaning", "Regular Maintenance", "Move-in/Move-out", "Eco-friendly Cleaning"]
+                    },
+                    {
+                        id: "cl2",
+                        name: "Kevin Anderson",
+                        initials: "KA",
+                        rating: 4.8,
+                        experience: 8,
+                        specialties: ["Office Cleaning", "Carpet Cleaning", "Window Washing"],
+                        pricing: "Starting at $45/hr",
+                        services: ["Office Cleaning", "Carpet Cleaning", "Window Cleaning", "Post-construction Cleaning"]
+                    }
+                ]
+            },
+            babysitters: {
+                title: "Babysitters",
+                description: "Our babysitters are thoroughly vetted, experienced in childcare, and trained in first aid and CPR. We offer flexible scheduling for parents who need reliable and trustworthy care for their children.",
+                providers: [
+                    {
+                        id: "b1",
+                        name: "Lauren Wilson",
+                        initials: "LW",
+                        rating: 5.0,
+                        experience: 10,
+                        specialties: ["Infants", "Toddlers", "Educational Activities"],
+                        pricing: "Starting at $25/hr",
+                        services: ["Regular Babysitting", "Infant Care", "Educational Activities", "Overnight Care"]
+                    },
+                    {
+                        id: "b2",
+                        name: "Mark Johnson",
+                        initials: "MJ",
+                        rating: 4.9,
+                        experience: 6,
+                        specialties: ["School-Age Children", "Homework Help", "Sports Activities"],
+                        pricing: "Starting at $22/hr",
+                        services: ["After-school Care", "Homework Assistance", "Weekend Sitting", "Activity Planning"]
+                    }
+                ]
+            },
+            mechanics: {
+                title: "Mechanics",
+                description: "Our mobile mechanics come to your home to perform vehicle repairs, maintenance, and diagnostics. Save time and hassle with our convenient, professional automotive services right at your doorstep.",
+                providers: [
+                    {
+                        id: "m1",
+                        name: "Carlos Ramirez",
+                        initials: "CR",
+                        rating: 4.8,
+                        experience: 20,
+                        specialties: ["Foreign Cars", "Diagnostics", "Engine Repair"],
+                        pricing: "Starting at $80/hr",
+                        services: ["Engine Repair", "Diagnostic Services", "Oil Change", "Brake Replacement"]
+                    },
+                    {
+                        id: "m2",
+                        name: "Natalie Chang",
+                        initials: "NC",
+                        rating: 4.7,
+                        experience: 12,
+                        specialties: ["Domestic Vehicles", "Electrical Systems", "Maintenance"],
+                        pricing: "Starting at $75/hr",
+                        services: ["Maintenance Service", "Electrical Repair", "Battery Replacement", "Tire Services"]
+                    }
+                ]
+            },
+            security: {
+                title: "Home Security Appliance",
+                description: "Our security professionals specialize in installing, repairing, and maintaining home security systems, including cameras, alarms, smart locks, and integrated security solutions for your peace of mind.",
+                providers: [
+                    {
+                        id: "s1",
+                        name: "Alex Turner",
+                        initials: "AT",
+                        rating: 4.9,
+                        experience: 15,
+                        specialties: ["Smart Home Security", "Camera Systems", "Alarm Installation"],
+                        pricing: "Starting at $70/hr",
+                        services: ["Security Camera Installation", "Smart Lock Installation", "Alarm System Setup", "Security Assessment"]
+                    },
+                    {
+                        id: "s2",
+                        name: "Olivia Parker",
+                        initials: "OP",
+                        rating: 4.8,
+                        experience: 9,
+                        specialties: ["Access Control", "Motion Sensors", "Integration Services"],
+                        pricing: "Starting at $65/hr",
+                        services: ["Access Control System", "Motion Sensor Installation", "Security System Integration", "Video Doorbell Installation"]
+                    }
+                ]
+            }
+        };
+        
+        // Service card image paths
+        const serviceImages = {
+            electricians: '/images/electrician.jpg',
+            plumbers: '/images/plumber.jpg',
+            carpenters: '/images/carpenter.jpg',
+            cleaners: '/images/cleaner.jpg',
+            babysitters: '/images/babysitter.jpg',
+            mechanics: '/images/mechanic.jpg',
+            security: '/images/security.jpg'
+        };
+
+        // Function to get URL parameters
+        function getUrlParameter(name) {
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            const results = regex.exec(location.search);
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        }
+
+        // Initialize page based on URL parameter
+        document.addEventListener('DOMContentLoaded', function() {
+            const serviceType = getUrlParameter('type') || 'electricians';
+            displayServiceProviders(serviceType);
+        });
+        
+        // Function to populate service providers
+        function displayServiceProviders(serviceType) {
+            // Default to electricians if no service type provided
+            const service = serviceData[serviceType] || serviceData.electricians;
+            
+            // Update page title and description
+            document.getElementById('service-title').textContent = service.title;
+            document.getElementById('service-description').textContent = service.description;
+            
+            // Clear existing providers
+            const providersList = document.getElementById('providers-list');
+            providersList.innerHTML = '';
+            
+            // Add provider cards
+            service.providers.forEach(provider => {
+                const card = document.createElement('div');
+                card.className = 'provider-card';
+                const serviceImage = serviceImages[serviceType] || '/images/default-service.jpg';
+                card.innerHTML = `
+                    <div class="provider-header">
+                        <div class="provider-avatar" style="background-image: url('${serviceImage}')">
+                            ${provider.initials}
+                        </div>
+                        <div class="provider-name-info">
+                            <div class="provider-name">${provider.name}</div>
+                            <div class="provider-info">
+                                <div class="provider-rating">
+                                    <span class="star-icon">★</span>
+                                    ${provider.rating}
+                                </div>
+                                <div class="provider-years">
+                                    <span class="calendar-icon">📅</span>
+                                    ${provider.experience} years
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="provider-body">
+                        <div class="provider-specialties">
+                            ${provider.specialties.map(specialty => `<span>${specialty}</span>`).join('')}
+                        </div>
+                        <div class="provider-pricing">${provider.pricing}</div>
+                        <button class="book-button" data-id="${provider.id}" data-name="${provider.name}" data-service="${serviceType}">Book Now</button>
+                    </div>
+                `;
+                providersList.appendChild(card);
+                
+                // Add event listener to the Book Now button
+                const bookButton = card.querySelector('.book-button');
+                bookButton.addEventListener('click', function() {
+                    openBookingModal(this.dataset.id, this.dataset.name, this.dataset.service);
+                });
+            });
+        }
+        
+        // Function to open booking modal
+        function openBookingModal(providerId, providerName, serviceType) {
+            const modal = document.getElementById('booking-modal');
+            const serviceProviderInput = document.getElementById('service-provider');
+            const serviceTypeSelect = document.getElementById('service-type');
+            const bookingDateInput = document.getElementById('booking-date');
+         
+
+            // Set provider name
+            serviceProviderInput.value = providerName;
+            
+            // Set minimum date to today
+            const today = new Date();
+            const formattedDate = today.toISOString().split('T')[0];
+            bookingDateInput.min = formattedDate;
+            
+            // Clear and populate service type options
+            serviceTypeSelect.innerHTML = '<option value="">Select Service Type</option>';
+            
+            // Get services for this provider
+            const provider = serviceData[serviceType].providers.find(p => p.id === providerId);
+            if (provider && provider.services) {
+                provider.services.forEach(service => {
+                    const option = document.createElement('option');
+                    option.value = service.toLowerCase().replace(/\s+/g, '-');
+                    option.textContent = service;
+                    serviceTypeSelect.appendChild(option);
+                });
+            }
+            
+            // Display modal
+            modal.style.display = 'flex';
+        }
+        
+        // Function to close booking modal
+        function closeBookingModal() {
+            const modal = document.getElementById('booking-modal');
+            modal.style.display = 'none';
+        }
+        
+        // Event listener for modal close button
+        document.getElementById('close-modal').addEventListener('click', closeBookingModal);
+        
+        // Event listener for booking form submission
+        document.getElementById('booking-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            // Get form values
+            const provider = document.getElementById('service-provider').value;
+            const serviceType = document.getElementById('service-type').value;
+            const date = document.getElementById('booking-date').value;
+            const time = document.getElementById('booking-time').value;
+            const notes = document.getElementById('booking-notes').value;
+            
+            // In a real app, you would send this data to your server
+            // For demo, we'll just show a confirmation alert
+            alert(`Booking confirmed!\n\nProvider: ${provider}\nService: ${document.getElementById('service-type').options[document.getElementById('service-type').selectedIndex].text}\nDate: ${date}\nTime: ${time}`);
+            
+            // Close the modal
+            closeBookingModal();
+        });
+        
+        // Close modal if user clicks outside of it
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('booking-modal');
+            if (event.target === modal) {
+                closeBookingModal();
+            }
+        });
+        
+        // Initialize page based on URL parameter
+        document.addEventListener('DOMContentLoaded', function() {
+            const serviceType = getUrlParameter('type') || 'electricians';
+            displayServiceProviders(serviceType);
+        });
+        
+        // Event listeners for filter changes
+        document.getElementById('sort-filter').addEventListener('change', function() {
+            // In a real application, this would re-sort the providers
+            console.log('Sort by:', this.value);
+        });
+        
+        document.getElementById('availability-filter').addEventListener('change', function() {
+            // In a real application, this would filter by availability
+            console.log('Availability:', this.value);
+        });
+        
+        document.getElementById('rating-filter').addEventListener('change', function() {
+            // In a real application, this would filter by rating
+            console.log('Rating:', this.value);
+        });
+        
+        // Logout button handler
+        document.getElementById('logout-btn').addEventListener('click', function() {
+            fetch('logout.php')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = 'login.html';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+    <script src="js/service.js"></script>
+</body>
+</html>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HOUSIE - Home Service At Your Fingertips</title>
+    <link rel="stylesheet" href="css/homepage.css">
+    <!-- Update the hero-overlay animation styles -->
+</head>
+<body>
+    <header>
+        <div class="dropdown">
+            <button class="dropdown-btn">
+                Services 
+                <span class="dropdown-icon">▼</span>
+            </button>
+            <div class="dropdown-content">
+                <a href="service.html?type=electricians">ELECTRICIANS</a>
+                <a href="service.html?type=plumbers">PLUMBERS</a>
+                <a href="service.html?type=carpenters">CARPENTERS</a>
+                <a href="service.html?type=cleaners">CLEANERS</a>
+                <a href="service.html?type=babysitters">BABYSITTERS</a>
+                <a href="service.html?type=mechanics">MECHANICS</a>
+                <a href="service.html?type=security">HOME SECURITY APPLIANCE</a>
+            </div>
+        </div>
+        
+        <div class="logo">
+            <h1>HOUSIE</h1>
+        </div>
+        <div class="user-profile">
+            <div class="user-avatar" id="user-avatar">
+                JS
+            </div>
+            <div class="user-info">
+                <span class="user-name" id="user-name">John Smith</span>
+                <span class="user-contact" id="user-email">john.smith@email.com</span>
+            </div>
+            <button id="logout-btn" class="logout-btn">Logout</button>
+        </div>
+    </header>
+    
+    <main>
+        <section class="hero-section">
+            <div class="hero-overlay"></div>
+            
+            <div class="hero-content">
+                <h2>Home Services At Your Fingertips</h2>
+                <p>Book trusted professionals for all your home service needs with just a few clicks.</p>
+                <a href="#" class="cta-button">Book a Service</a>
+            </div>
+        </section>
+        
+        <h2 class="services-heading">Our Services</h2>
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-image" style="background-image: url('/api/placeholder/300/150?text=Electrician')"></div>
+                <div class="service-content">
+                    <h3>Electricians</h3>
+                    <p>Professional electricians for all your electrical repairs, installations, and maintenance needs.</p>
+                    <a href="#" class="service-link">Book Now <span>→</span></a>
+                </div>
+            </div>
+            
+            <div class="service-card">
+                <div class="service-image" style="background-image: url('/api/placeholder/300/150?text=Plumber')"></div>
+                <div class="service-content">
+                    <h3>Plumbers</h3>
+                    <p>Expert plumbers ready to fix leaks, install fixtures, and solve all your plumbing issues.</p>
+                    <a href="#" class="service-link">Book Now <span>→</span></a>
+                </div>
+            </div>
+            
+            <div class="service-card">
+                <div class="service-image" style="background-image: url('/api/placeholder/300/150?text=Carpenter')"></div>
+                <div class="service-content">
+                    <h3>Carpenters</h3>
+                    <p>Skilled carpenters for furniture repair, custom woodwork, and home improvement projects.</p>
+                    <a href="#" class="service-link">Book Now <span>→</span></a>
+                </div>
+            </div>
+            
+            <div class="service-card">
+                <div class="service-image" style="background-image: url('/api/placeholder/300/150?text=Cleaner')"></div>
+                <div class="service-content">
+                    <h3>Cleaners</h3>
+                    <p>Professional cleaning services to keep your home spotless and sanitized.</p>
+                    <a href="#" class="service-link">Book Now <span>→</span></a>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>HOUSIE</h3>
+                <p>Home services at your fingertips. Quality professionals, transparent pricing, and guaranteed satisfaction.</p>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Services</h3>
+                <ul>
+                    <li><a href="#">Electricians</a></li>
+                    <li><a href="#">Plumbers</a></li>
+                    <li><a href="#">Carpenters</a></li>
+                    <li><a href="#">Cleaners</a></li>
+                    <li><a href="#">Babysitters</a></li>
+                    <li><a href="#">Mechanics</a></li>
+                    <li><a href="#">Home Security</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Company</h3>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Contact</h3>
+                <ul>
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">Emergency Services</a></li>
+                    <li><a href="#">support@housie.com</a></li>
+                    <li><a href="#">1-800-HOUSIE</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2025 HOUSIE. All rights reserved.</p>
+        </div>
+    </footer>
+    <script>document.getElementById('logout-btn').addEventListener('click', function() {
+        fetch('logout.php')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                window.location.href = 'login.html';
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+    </script>
+    </body>
+
